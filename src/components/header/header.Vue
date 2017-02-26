@@ -33,6 +33,28 @@
     <div class="detail-wrapper">
       <div class="detail-main">
         <div class="name">{{seller.name}}</div>
+        <div class="star-wrapper">
+          <star :size="48" :score="seller.score"></star>
+        </div>
+        <div class="title">
+          <div class="line"></div>
+          <div class="text">优惠信息</div>
+          <div class="line"></div>
+        </div>
+        <ul v-if="seller.supports" class="supports">
+          <li class="support-item" v-for="(item, index) in seller.supports">
+            <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+            <span class="text">{{seller.supports[index].description}}</span>
+          </li>
+        </ul>
+        <div class="title">
+          <div class="line"></div>
+          <div class="text">商家公告</div>
+          <div class="line"></div>
+        </div>
+        <div class="bulletin">
+          <p class="content">{{seller.bulletin}}</p>
+        </div>
       </div>
     </div>
     <div class="detail-close">
@@ -42,6 +64,7 @@
 </div>
 </template>
 <script type="text/ecmascript-6">
+import star from 'components/star/star';
   export default {
       props: {
           seller: {
@@ -55,6 +78,9 @@
       },
       created() {
           this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+      },
+      components: {
+        star
       }
   };
 </script>
@@ -172,6 +198,58 @@
                text-align : center
                font-size: 16px
                font-weight: 700
+             .star-wrapper
+               margin-top: 18px
+               padding: 2px 0
+               text-align: center 
+             .title
+               display: flex
+               width: 80%
+               margin: 28px auto 24px auto
+               .line
+                 flex: 1
+                 position: relative
+                 border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+                 top: -6px
+               .text
+                 font-size: 14px
+                 padding: 0 12px
+                 font-weight: 700
+             .supports
+               width: 80%
+               margin: 0 auto
+               .support-item
+                 margin: 0 0 12px 16px
+                 &:last-child
+                   margin-bottom: 0
+                 .icon
+                   display: inline-block
+                   vertical-align: top
+                   margin-right: 6px
+                   bg-image-size(16px, 16px)
+                   &.decrease
+                     bg-image("decrease_2")
+                   &.discount
+                     bg-image("discount_2")
+                   &.guarantee
+                     bg-image("guarantee_2")
+                   &.invoice
+                     bg-image("invoice_2")
+                   &.special
+                     bg-image("special_2") 
+                 .text
+                   font-size: 12px
+                   font-weight: 200
+                   line-height: 12px  
+             .bulletin
+               width: 80%
+               margin: 0 auto
+               .content
+                 padding: 0 12px
+                 font-size: 12px
+                 font-weight: 200
+                 line-height: 24px  
+                 text-align: justify    
          .detail-close
            position: relative
            width: 32px
@@ -180,4 +258,5 @@
            clear: both
            .iconfont
              font-size: 32px;
+     
 </style>

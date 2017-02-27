@@ -27,17 +27,23 @@
 			   			<div class="price">
 			   				<span class="nowPrice">￥{{food.price}}</span><span v-show="food.oldPrice" class="oldPrice">￥{{food.oldPrice}}</span>
 			   			</div>
+			   			<div class="cartcontrol-wrapper">
+			   				<cartcontrol :food="food"></cartcontrol>
+			   			</div>
 			   		</div>
 		   		</li>
 		   	</ul>
 		</li>
 	 </ul>	
 	</div>
+	<shopcart :select-foods="seleteFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
+import shopcart from 'components/shopcart/shopcart.vue';
+import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
 const ERR_OK = 0;
 export default {
   props: {
@@ -51,6 +57,10 @@ export default {
       listHeight: [],
       scrollY: 0
     };
+  },
+  components: {
+  	shopcart,
+  	cartcontrol
   },
   created() {
   	this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
@@ -71,7 +81,8 @@ export default {
   	  	click: true
   	  });
   	  this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-  	  	probeType: 3  // 监听滚动位置
+  	  	probeType: 3,  // 监听滚动位置
+  	  	click: true
   	  });
   	  this.foodsScroll.on('scroll', (pos) => { // 监听滚动事件，获取滚动数值
   	  	this.scrollY = Math.abs(Math.round(pos.y));	// 处理返回值
@@ -107,6 +118,17 @@ export default {
   	  	}
   	  }
   	  return 0;
+  	},
+  	seleteFoods() {
+  	  let foods = [];
+  	  this.goods.forEach((good) => {
+  	  	good.foods.forEach((food) => {
+  	  	  if (food.count) {
+  	  	  	foods.push(food);
+  	  	  }
+  	  	});
+  	  });
+  	  return foods;
   	}
   }
 };
@@ -210,5 +232,9 @@ export default {
 			  	  font-weight: 700
 			  	.oldPrice
 			  	  text-decoration: line-through
-			  	  font-weight: 700  	  	
+			  	  font-weight: 700
+			  .cartcontrol-wrapper
+			  	position: absolute
+			  	bottom: 12px
+			  	right: 0	    	  	
 </style>

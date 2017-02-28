@@ -1,10 +1,10 @@
 <template>
 <div class="cartcontrol">
 	<transition name="fade">
-		<div class="cart-decrease" v-show="food.count > 0" @click="decreaseCart($event)"><i class="iconfont">&#xe629;</i></div>
+		<div class="cart-decrease iconfont" v-show="food.count > 0" @click="decreaseCart($event)">&#xe629;</div>
 	</transition>
 	<div class="cart-count" v-show="food.count > 0">{{food.count}}</div>
-	<div class="cart-plus" @click="addCart($event)"><i class="iconfont">&#xe602;</i></div>
+	<div class="cart-plus iconfont" @click="addCart($event)">&#xe602;</div>
 </div>
 </template>
 
@@ -26,6 +26,7 @@ export default {
   	  } else {
   	  	this.food.count++;
   	  }
+  	  this.$emit('addMe', event.target);  // 派发事件
   	},
   	decreaseCart(event) {
   	  if (!event._constructed) {
@@ -33,8 +34,6 @@ export default {
   	  }
   	  this.food.count--;
   	}
-  },
-  created() {
   }
 };
 </script>
@@ -48,7 +47,7 @@ export default {
 	  	cursor: pointer
 	  .cart-decrease
 	  	transition: all .3s	linear
-	  	.iconfont
+	  	&.iconfont
 	  	  font-size: 22px
 	  	  color: #00a0dc
 	  	  line-height : 48px
@@ -66,7 +65,7 @@ export default {
 	  	color: rgb(147, 153, 159)
 	  	padding: 0 6px
 	  .cart-plus
-	  	.iconfont
+	  	&.iconfont
 	  	  font-size: 24px
 	  	  color: #00a0dc
 	  	  line-height : 48px

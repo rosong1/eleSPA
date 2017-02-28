@@ -28,7 +28,7 @@
 			   				<span class="nowPrice">￥{{food.price}}</span><span v-show="food.oldPrice" class="oldPrice">￥{{food.oldPrice}}</span>
 			   			</div>
 			   			<div class="cartcontrol-wrapper">
-			   				<cartcontrol :food="food"></cartcontrol>
+			   				<cartcontrol :food="food" @addMe="addCart"></cartcontrol>
 			   			</div>
 			   		</div>
 		   		</li>
@@ -36,7 +36,7 @@
 		</li>
 	 </ul>	
 	</div>
-	<shopcart :select-foods="seleteFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+	<shopcart ref="shopcart" :select-foods="seleteFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 </div>
 </template>
 
@@ -76,6 +76,12 @@ export default {
     });
   },
   methods: {
+  	_drop(target) {  // 访问shopcart子组件  使用之前，要在引用的位置绑定ref="shopcart"
+  	  	this.$refs.shopcart.drop(target);// 调用子组件的drop方法
+  	},
+  	addCart(target) {	// 接受 cartcontrol传过来的事件     1.在引用位置绑定触发事件addMe 
+  	  this._drop(target);// 将target传入父（goods）组件	// 2.在子组件触发addMe
+  	},
   	_initScroll() {  // 获取dom，触发滚动
   	  this.menuScroll = new BScroll(this.$refs.menuWrapper, { // 使其可以触发click事件
   	  	click: true
@@ -99,10 +105,9 @@ export default {
   	  }
   	},
   	seleteMenu(index, event) {
-  	  if (event._constructed) { // 解决PC端触发两次原生事件的问题
+  	  if (!event._constructed) { // 解决PC端触发两次原生事件的问题
   	  	return;
   	  }
-  	  console.log(index);
   	  let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
   	  let el = foodList[index];
   	  this.foodsScroll.scrollToElement(el, 250);

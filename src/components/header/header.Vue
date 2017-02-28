@@ -111,6 +111,7 @@ import star from 'components/star/star';
                bg-image-size(30px, 18px)
                bg-image("brand")
                vertical-align: top
+               margin-right: 6px
              .name
                font-size: 16px
                font-weight: bold

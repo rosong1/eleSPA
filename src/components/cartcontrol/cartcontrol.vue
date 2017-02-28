@@ -61,7 +61,7 @@ export default {
 	  .cart-count
 	  	display: inline-block
 	  	font-size: 12px
-	  	vertical-align: text-bottom
+	  	vertical-align: super
 	  	color: rgb(147, 153, 159)
 	  	padding: 0 6px
 	  .cart-plus

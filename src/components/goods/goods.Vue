@@ -240,6 +240,6 @@ export default {
 			  	  font-weight: 700
 			  .cartcontrol-wrapper
 			  	position: absolute
-			  	bottom: 12px
+			  	bottom: 0px
 			  	right: 0	    	  	
 </style>

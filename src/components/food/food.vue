@@ -33,6 +33,30 @@
 				<div class="content">
 					<h1 class="title">商品评价</h1>
 					<ratingselect @select="getType" :desc="desc" :select-type="selectType" :only-content="onlyContent" :ratings="food.ratings" @toggleContent="getOnlyContent"></ratingselect>
+					<div class="rating-wrapper">
+						<ul v-show="food.ratings && food.ratings.length">
+							<li v-show="needShow(rating.rateType, rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
+								<div class="content">
+									<div class="content-left">
+										<h3 class="time">{{formatTime(rating.rateTime)}}</h3>
+										<div class="detail">
+											<span class="icon">
+												<i class="iconfont support" v-if="rating.rateType===0">&#xe60b;</i>
+												<i class="iconfont" v-if="rating.rateType===1">&#xe60e;</i>
+											</span>
+											<span class="text">{{rating.text}}</span></div>
+									</div>
+									<div class="content-right">
+										<span class="username">{{rating.username}}</span>
+										<img :src="rating.avatar" alt="用户头像" class="avatar">
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="no-rating" v-show="!food.ratings || !food.ratings.length">
+							没有评价(⊙o⊙)哦
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -43,6 +67,7 @@
 <script type="text/ecmascript-6">
 import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
 import split from 'components/split/split.vue';
+import {formatTime} from 'common/js/date';
 import ratingselect from 'components/ratingselect/ratingselect.vue';
 import Vue from 'vue';
 import BScroll from 'better-scroll';   //  给该组件绑定BScroll，使其内容区超出视口时，可以滚动  滚动区为绑定节点的第一个子节点
@@ -105,6 +130,19 @@ export default {
   		}
   		this.$emit('addMe', event.target);
   		Vue.set(this.food, 'count', 1);
+  	},
+  	needShow(type, text) {
+  		if (this.onlyContent && !text) {
+  			return false;
+  		}
+  		if (this.selectType === ALL) {
+  			return true;
+  		} else {
+  			return type === this.selectType;
+  		}
+  	},
+  	formatTime(time) {
+  		return formatTime(time);
   	}
   }
 };
@@ -213,6 +251,45 @@ export default {
 			.content
 				padding: 18px 0
 				.title
-					margin-left: 18px			
-			
+					margin-left: 18px
+				.rating-wrapper
+					border-top: 1px solid rgba(7,17,27,0.1)
+					padding: 0 18px
+					.rating-item
+						border-1px(rgba(7,17,27,0.1))
+						.content
+							display: flex
+							justify-content: space-between
+							color: rgb(147,153,159)
+							.content-left
+						  	.time
+						  		margin-bottom: 6px
+						  		font-size: 10px
+						  		line-height: 12px
+						  	.detail
+						  		.iconfont
+						  			font-size: 12px
+						  			line-height: 24px
+						  			margin-right: 4px
+						  			&.support
+						  				color: rgb(0,160,220)
+						  		.text
+						  			font-size: 12px
+						  			color:rgb(7,17,27)
+						  			line-height: 16px	
+						  .content-right
+						  	.username
+						  		font-size: 10px
+						  		line-height: 12px
+						  		margin-right: 6px
+						  		vertical-align: text-top
+						  	.avatar
+						  		width: 12px
+						  		height: 12px
+						  		border-radius: 50%
+						  		vertical-align: text-top	
+					.no-rating
+						padding: 10px
+						font-size: 12px
+						color: #939393	  		
 </style>

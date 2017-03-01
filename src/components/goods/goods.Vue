@@ -14,7 +14,7 @@
 		<li v-for="(item, index) in goods" class="food-list food-list-hook">
 		   	<h1 class="title">{{item.name}}</h1>
 		   	<ul>
-		   		<li v-for="(food, index) in item.foods" class="food-item border-1px">
+		   		<li @click="selectFood(food, $event)" v-for="(food, index) in item.foods" class="food-item border-1px">
 			   		<div class="icon">
 			   			<img :src="food.icon" :alt="food.name" width="57" height="57">
 			   		</div>
@@ -37,6 +37,7 @@
 	 </ul>	
 	</div>
 	<shopcart ref="shopcart" :select-foods="seleteFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+	<food :food="selectedFood" ref="foodDetail" @addMe="addCart"></food>
 </div>
 </template>
 
@@ -44,6 +45,7 @@
 import BScroll from 'better-scroll';
 import shopcart from 'components/shopcart/shopcart.vue';
 import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
+import food from 'components/food/food.vue';
 const ERR_OK = 0;
 export default {
   props: {
@@ -52,15 +54,17 @@ export default {
     }
   },
   data() {
-	return {
-      goods: [],
-      listHeight: [],
-      scrollY: 0
-    };
+		return {
+	      goods: [],
+	      listHeight: [],
+	      scrollY: 0,
+	      selectedFood: {}
+	    };
   },
   components: {
   	shopcart,
-  	cartcontrol
+  	cartcontrol,
+  	food
   },
   created() {
   	this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
@@ -111,6 +115,13 @@ export default {
   	  let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
   	  let el = foodList[index];
   	  this.foodsScroll.scrollToElement(el, 250);
+  	},
+  	selectFood(food, event) {
+  		if (!event._constructed) {
+  			return;
+  		}
+  		this.selectedFood = food;
+  		this.$refs.foodDetail.show();
   	}
   },
   computed: {

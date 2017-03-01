@@ -381,11 +381,11 @@ import BScroll from 'better-scroll';
 	  				color: rgb(240,20,20)
 	  				font-weight: 700
 	  				font-size: 14px
-	  				margin-right: 6px
+	  				padding-right: 6px
 	  			.cartcontrol-wrapper
 	  				position: absolute
 	  				right: 0
-	  				bottom: -7px
+	  				bottom: -5px
 	.list-mask
 		position: fixed
 		top: 0

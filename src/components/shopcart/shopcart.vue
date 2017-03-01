@@ -379,7 +379,7 @@ import BScroll from 'better-scroll';
 	  				right: 90px
 	  				bottom: 12px
 	  				color: rgb(240,20,20)
-	  				font-weight: 700
+	  				font-weight: 700	
 	  				font-size: 14px
 	  				padding-right: 6px
 	  			.cartcontrol-wrapper

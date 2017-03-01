@@ -1,6 +1,6 @@
 <template>
 	<transition name="fade">
-	<div class="food" v-show="showFlag" ref="foodScroll">
+	<div class="food" v-show="showFlag" ref="foodDetail">
 	  <div class="food-content">
 			<div class="image-header">
 				<img :src="food.image" alt="food.name">
@@ -21,18 +21,19 @@
 					<div class="buy" v-show="!food.count || food.count===0" @click="addFood">加入购物车</div>
 				</transition>
 			</div>
-		</div>
-		<split v-show="food.info"></split>
-		<div class="food-info" v-show="food.info">
-			<div class="content">
-				<h1 class="title">商品介绍</h1>
-				<p class="desc">{{food.info}}</p>
+			<split v-show="food.info"></split>
+			<div class="food-info" v-show="food.info">
+				<div class="content">
+					<h1 class="title">商品介绍</h1>
+					<p class="desc">{{food.info}}</p>
+				</div>
 			</div>
-		</div>
-		<split></split>
-		<div class="food-ratings">
-			<div class="content">
-				<h1 class="title">商品评价</h1>
+			<split></split>
+			<div class="food-ratings">
+				<div class="content">
+					<h1 class="title">商品评价</h1>
+					<ratingselect @select="getType" :desc="desc" :select-type="selectType" :only-content="onlyContent" :ratings="food.ratings" @toggleContent="getOnlyContent"></ratingselect>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -42,8 +43,14 @@
 <script type="text/ecmascript-6">
 import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
 import split from 'components/split/split.vue';
+import ratingselect from 'components/ratingselect/ratingselect.vue';
 import Vue from 'vue';
-import BScroll from 'better-scroll';   //  给该组件绑定BScroll，使其内容区超出视口时，可以滚动
+import BScroll from 'better-scroll';   //  给该组件绑定BScroll，使其内容区超出视口时，可以滚动  滚动区为绑定节点的第一个子节点
+
+// const POSITIVE = 0;
+// const NEGATIVE = 1;
+const ALL = 2;
+
 export default {
 	name: 'foodDetail',
   props: {
@@ -53,27 +60,41 @@ export default {
   },
   data() {
   	return {
-  		showFlag: false
+  		showFlag: false,
+  		selectType: ALL,
+  		onlyContent: true,
+  		desc: {
+  			all: '全部',
+  			positive: '推荐',
+  			negative: '吐槽'
+  		}
   	};
   },
   components: {
   	cartcontrol,
-  	split
+  	split,
+  	ratingselect
   },
   methods: {
-  	show() {
+  	show() {  // 初始状态
   		this.showFlag = true;
+  		this.selectType = ALL;
+  		this.onlyContent = false;
   		this.$nextTick(() => {
-  			console.log(1);
   			if (!this.scroll) {
-  				console.log(1.1);
-  				this.scroll = new BScroll(this.$refs.foodScroll, {
+  				this.scroll = new BScroll(this.$refs.foodDetail, {
   					click: true
   				});
   			} else {
   				this.scroll.refresh();
   			}
   		});
+  	},
+  	getType(type) {
+  		this.selectType = type;
+  	},
+  	getOnlyContent(onlyContent) {
+  		this.onlyContent = onlyContent;
   	},
   	hide() {
   		this.showFlag = false;
@@ -103,8 +124,6 @@ export default {
 		transform: translate3d(0,0,0)
 		&.fade-enter, &.fade-leave-active
 			transform: translate3d(-100%, 0, 0)
-		.food-content .content, .food-info, .food-ratings
-			padding: 18px
 		.food-content
 			.image-header/* 当图片未加载完成时，撑开它的高度 */
 				position: relative
@@ -129,6 +148,7 @@ export default {
 			.content
 				color: rgb(147, 153, 159)
 				position: relative
+				padding:18px
 				.name
 					font-size: 14px
 					font-weight : 700
@@ -176,17 +196,23 @@ export default {
 						background-color: #0093ca
 					&.fade-enter, &.fade-leave-active
 					  opacity: 0				  
+		.food-info .content .title, .food-ratings .content .title
+			font-size: 14px
+			color: rgb(7,17,27)
+			font-weight: 600					  
 		.food-info
 			.content
-				.title
-					font-size: 14px
-					color: rgb(7,17,27)
-					font-weight: 600
 				.desc
 					font-size: 12px
 					font-weight: 200
 					color: rgb(77,85,93)
 					line-height: 24px
 					box-sizing: border-box
-					padding: 8px 6px	
+					padding: 8px 6px
+		.food-ratings
+			.content
+				padding: 18px 0
+				.title
+					margin-left: 18px			
+			
 </style>

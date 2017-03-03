@@ -1,7 +1,7 @@
 <template>
 <div class="ratings" ref="ratingsList">
 	<div class="ratings-wrapper">
-		<div class="overview" >
+		<div class="overview">
 			<div class="overview-left">
 				<h1 class="total-score">{{seller.score}}</h1>
 				<p class="desc">综合评分</p>

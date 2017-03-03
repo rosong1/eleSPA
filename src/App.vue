@@ -12,27 +12,34 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="sellerdemo"></router-view>
+    <keep-alive>
+     <router-view :seller="sellerdemo"></router-view>
+    </keep-alive>
   </div>
 
 </template>
 
 <script>
   import header from './components/header/header.vue';
-
+  import {urlParse} from 'common/js/util';
   const ERR_OK = 0;
 
   export default {
     data () {
       return {
-          sellerdemo: {}
+          sellerdemo: {
+            id: (() => {
+              let queryParam = urlParse();
+              return queryParam.id;
+            })()
+          }
       };
     },
     created() {
       this.$http.get('/api/seller').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
-            this.sellerdemo = response.data;
+            this.sellerdemo = Object.assign({}, response.data, this.sellerdemo);
         }
       });
     },
@@ -61,6 +68,5 @@
           color: rgb(77, 85, 93)
           &.active
              color: rgb(240,20,20)
-
-
 </style>
+

@@ -21,8 +21,10 @@ const router = new VueRouter({
   ],
   linkActiveClass: 'active'
 });
+router.push('/goods');
  new Vue({
   el: '#app',
   router,
   render: h => h(App)
 });
+
